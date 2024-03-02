@@ -6,9 +6,11 @@ import java.util.stream.Collectors;
 public class ArraysAndHashing {
 
     public static boolean validAnagrams(String s , String t){
+        //check whether the strings length is equal
         if(s.length() != t.length()){
             return false;
         }
+        //store each character of string in map with occurances
         Map<Character,Integer> map = new HashMap();
         for(int i=0;i<s.length();i++){
             if(map.containsKey(s.charAt(i))){
@@ -16,9 +18,7 @@ public class ArraysAndHashing {
             }else{
                 map.put(s.charAt(i),1);
             }
-
         }
-
         for(int i=0;i<t.length();i++){
             if(!map.containsKey(t.charAt(i))){
                 return false;
@@ -50,24 +50,16 @@ return res;
 
     public static List<List<String>> groupAnagrams(String[] strs) {
         Map<String,List<String>> map = new HashMap<>();
-        List<String> sl;
         for(String s : strs){
             char[] c = s.toCharArray();
             Arrays.sort(c);
             String sortedS= new String(c);
             if(! map.containsKey(sortedS)){
-                sl = new ArrayList<>();
-                sl.add(s);
-                map.put(sortedS,sl);
+                map.put(sortedS,new ArrayList<>());
             }
-            else{
-               sl= map.get(sortedS);
-               sl.add(s);
-            }
-
-
+            map.get(sortedS).add(s);
         }
-       return map.values().stream().collect(Collectors.toList());
+       return new ArrayList<>(map.values());
 
     }
 }
