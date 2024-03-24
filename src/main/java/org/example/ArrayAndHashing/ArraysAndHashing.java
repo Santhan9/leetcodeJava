@@ -63,8 +63,87 @@ return res;
 
     }
 
+    public static int[] topKFrequent(int[] nums, int k) {
+        Map<Integer,Integer> map = new HashMap<>();
 
-        public List<List<String>> groupAnagramsLessTimeComplexity(String[] strs) {
+        for(int i : nums){
+            if(!map.containsKey(i)){
+                map.put(i,0);
+            }
+            map.put(i,map.get(i)+1);
+        }
+        List<Integer> collect = map.entrySet().stream().sorted((e1,e2)-> e2.getValue()-e1.getValue()).limit(k).map(e -> e.getKey()).collect(Collectors.toList());
+ int[] res = new int[k];
+        for(int i =0;i<k;i++){
+            res[i]=collect.get(i);
+        }
+return res;
+    }
+
+    public int[] productExceptSelf(int[] nums) {
+
+
+return null;
+    }
+
+    public int[] topKFrequent1(int[] nums, int k) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        PriorityQueue<Integer> pq = new PriorityQueue<>(new Comparator<Integer>(){
+            public int compare(Integer a, Integer b){
+                return map.get(b)-map.get(a);
+            }
+        });
+        int[] ans = new int[k];
+        for(int i : nums){
+            map.put(i, map.getOrDefault(i,0)+1);
+        }
+        for(int i :map.keySet()){
+            pq.add(i);
+        }
+        for(int i=0;i<k;i++){
+            ans[i] = pq.poll();
+        }
+        return ans;
+
+
+
+
+    }
+
+    public int[] topKFrequent2(int[] nums, int k) {
+        Map<Integer, Integer> freqMap = new HashMap<>();
+        for(int num : nums) {
+            freqMap.put(num, freqMap.getOrDefault(num, 0)+1);
+        }
+
+        List<Integer>[] buckets = new List[nums.length+1];
+        for(int uniqueNum : freqMap.keySet()) {
+            int currFreq = freqMap.get(uniqueNum);
+            if(buckets[currFreq] == null) {
+                buckets[currFreq] = new ArrayList<>();
+            }
+            buckets[currFreq].add(uniqueNum);
+        }
+
+        int index = 0;
+        int[] result = new int[k];
+        for(int freq = nums.length; freq > 0; freq--) {
+            if(buckets[freq] == null) continue;
+            for(int i = 0; i < buckets[freq].size(); i++) {
+                result[index] = buckets[freq].get(i);
+                index += 1;
+                k -= 1;
+                if(k == 0) {
+                    return result;
+                }
+            }
+        }
+
+        return result;
+    }
+
+
+        public List<List<String>> groupAnagrams1(String[] strs) {
             List<List<String>> res = new AbstractList<List<String>>() {
                 List<List<String>> result = null;
 
@@ -105,4 +184,7 @@ return res;
             };
             return res;
         }
+
+
+
 }
